@@ -1,0 +1,362 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 62,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import pandas as pd\n",
+    "import numpy as np\n",
+    "from sklearn.linear_model import LogisticRegression\n",
+    "from sklearn.metrics import accuracy_score\n",
+    "from sklearn.metrics import confusion_matrix\n",
+    "\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 58,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def data_split(data, ratio):\n",
+    "    np.random.seed(100)\n",
+    "    shuffled = np.random.permutation(len(data))\n",
+    "    test_set_size = int(len(data)*ratio)\n",
+    "    test_indices = shuffled[:test_set_size]\n",
+    "    train_indices = shuffled[test_set_size:]\n",
+    "    return data.iloc[train_indices], data.iloc[test_indices]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 115,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "if __name__ == \"__main__\":\n",
+    "    dataset = pd.read_csv(\"C:\\\\Users\\\\Ayush\\\\Downloads\\\\covid19-symptoms-checker\\Cleaned-Data.csv\")\n",
+    "    train,test = data_split(dataset, 0.2)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 36,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "X_train = train[['Fever','Tiredness', 'Dry-Cough', 'Difficulty-in-Breathing', 'Sore-Throat', 'None_Sympton', 'Pains', 'Nasal-Congestion',\n",
+    "        'Runny-Nose','Diarrhea','None_Experiencing','Age_0-9','Age_10-19','Age_20-24','Age_25-59','Age_60+','Gender_Female','Gender_Male',\n",
+    "        'Gender_Transgender','Severity_Mild','Severity_Moderate','Severity_None','Severity_Severe','Contact_Dont-Know','Contact_No','Contact_Yes'\n",
+    "        ]].to_numpy()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 17,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "X_test = test[['Fever','Tiredness', 'Dry-Cough', 'Difficulty-in-Breathing', 'Sore-Throat', 'None_Sympton', 'Pains', 'Nasal-Congestion',\n",
+    "        'Runny-Nose','Diarrhea','None_Experiencing','Age_0-9','Age_10-19','Age_20-24','Age_25-59','Age_60+','Gender_Female','Gender_Male',\n",
+    "        'Gender_Transgender','Severity_Mild','Severity_Moderate','Severity_None','Severity_Severe','Contact_Dont-Know','Contact_No','Contact_Yes'\n",
+    "        ]].to_numpy()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 18,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "Y_train = train[['Country']].to_numpy()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 19,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "Y_test = test[['Country']].to_numpy()\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 38,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "C:\\ProgramData\\Anaconda3\\lib\\site-packages\\sklearn\\linear_model\\logistic.py:432: FutureWarning: Default solver will be changed to 'lbfgs' in 0.22. Specify a solver to silence this warning.\n",
+      "  FutureWarning)\n",
+      "C:\\ProgramData\\Anaconda3\\lib\\site-packages\\sklearn\\utils\\validation.py:724: DataConversionWarning: A column-vector y was passed when a 1d array was expected. Please change the shape of y to (n_samples, ), for example using ravel().\n",
+      "  y = column_or_1d(y, warn=True)\n",
+      "C:\\ProgramData\\Anaconda3\\lib\\site-packages\\sklearn\\linear_model\\logistic.py:469: FutureWarning: Default multi_class will be changed to 'auto' in 0.22. Specify the multi_class option to silence this warning.\n",
+      "  \"this warning.\", FutureWarning)\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "LogisticRegression(C=1.0, class_weight=None, dual=False, fit_intercept=True,\n",
+       "                   intercept_scaling=1, l1_ratio=None, max_iter=100,\n",
+       "                   multi_class='warn', n_jobs=None, penalty='l2',\n",
+       "                   random_state=None, solver='warn', tol=0.0001, verbose=0,\n",
+       "                   warm_start=False)"
+      ]
+     },
+     "execution_count": 38,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "clf = LogisticRegression()\n",
+    "clf.fit(X_train, Y_train)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 51,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "0.09165088383838384"
+      ]
+     },
+     "execution_count": 51,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    " pred =clf.predict(X_test)\n",
+    " clf.score(X_train,Y_train)\n",
+    " clf.score(X_test,Y_test) \n",
+    " \n",
+    " \n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 61,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "0.09165088383838384\n",
+      "[[ 471  486  512  535  477  491  505  488  476  508]\n",
+      " [ 702  595  674  669  647  649  699  679  681  654]\n",
+      " [ 495  456  431  428  462  457  445  467  440  492]\n",
+      " [1220 1154 1105 1056 1160 1145 1137 1082 1165 1176]\n",
+      " [ 190  180  205  175  179  162  198  197  182  193]\n",
+      " [ 587  601  569  584  617  555  592  620  606  599]\n",
+      " [ 665  676  670  637  686  666  568  624  619  640]\n",
+      " [ 949  913  962  911  965  970  954  865  939  946]\n",
+      " [ 951  956  912  964  982  984  955  915  856  941]\n",
+      " [ 283  277  284  285  281  277  279  289  271  231]]\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(accuracy_score(pred, Y_test))\n",
+    "print(confusion_matrix(pred, Y_test))\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 69,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import pickle"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 71,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "with open('model_pickle','wb') as f:\n",
+    "    pickle.dump(model,f)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 105,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "with open('model_pickle','rb') as f:\n",
+    "    mp = pickle.load(f)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 116,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array(['France', 'Spain', 'Other-EUR', ..., 'Germany',\n",
+       "       'Republic of Korean', 'Other-EUR'], dtype=object)"
+      ]
+     },
+     "execution_count": 116,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "mp.predict(X_test)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 117,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "prediction=mp.predict([[1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1]])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 118,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array(['Spain'], dtype=object)"
+      ]
+     },
+     "execution_count": 118,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "prediction"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 119,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "prediction=mp.predict([[0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0]])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 120,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array(['Italy'], dtype=object)"
+      ]
+     },
+     "execution_count": 120,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "prediction"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 121,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "prediction=mp.predict([[1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1]])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 122,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array(['Spain'], dtype=object)"
+      ]
+     },
+     "execution_count": 122,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "prediction"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 123,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "0.09165088383838384"
+      ]
+     },
+     "execution_count": 123,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "clf.score(X_test,Y_test)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.7.3"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
