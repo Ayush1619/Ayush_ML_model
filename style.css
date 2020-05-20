@@ -1,0 +1,49 @@
+*{
+	margin: 0;
+	padding: 0;
+	font-family: Century Gothic;
+}
+body{
+	background-image: url(../covid4.jPG);
+	height: 100vh;
+	background-size: cover;
+	background-position: center;
+}
+
+ 
+h1{
+	background-position: center;
+	margin-left: 450px;
+	padding: 15px;
+	font-size: 80px;
+	color:  #ff1493;
+
+
+
+}
+input { 
+	width: 20%; 
+	margin-bottom: 10px;
+	margin-top: 40px;
+	margin-left: 600px; 
+	border: none;
+	outline: none;
+	padding: 15px;
+    font-size: 15px;
+    background-color: #f0ffff;
+}
+button {
+	width: 10%;
+	margin-left: 685px;
+	margin-top: 20px;
+	margin-bottom: 10px;
+	height: 5vh;
+	background-color: #00ffff;
+}
+div1 {
+	margin-top:  20px;
+	margin-left: 640px;
+	font-size: 30px;
+	color: #ff0000;
+
+}
